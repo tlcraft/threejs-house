@@ -5,17 +5,16 @@ import {
   Clock,
   Color,
   DoubleSide,
+  Group,
   Light,
   Material,
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
-  MeshPhongMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
   Scene,
-  SphereGeometry,
   WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -38,21 +37,19 @@ function startup(): void {
     const container: HTMLElement | any = document.getElementById("three");
     container.appendChild( renderer.domElement );
 
-    const sphere = generateSphere();
-    scene.add(sphere);
+    const ground = generatePlane();
+    scene.add(ground);
+    
+    const house = new Group();
+    scene.add(house);
 
-    const plane = generatePlane();
-    scene.add(plane);
-
-    const ambientLight = new AmbientLight( 0x404040, 1 );
+    const ambientLight = new AmbientLight( 0x404040, 2 );
     scene.add(ambientLight);
 
     const animate = function () {
         requestAnimationFrame(animate);
 
-        const delta = clock.getDelta();
-
-        sphere.rotation.y += delta;
+        //const delta = clock.getDelta();
 
         // Alternative control schemes
         // camera.position.x = cursor.x * 100;
@@ -67,7 +64,7 @@ function startup(): void {
         renderer.render(scene, camera);
     };
 
-    configureMeshDebug(sphere, 'sphere');
+    configureMeshDebug(ground, 'ground plane');
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
@@ -179,22 +176,12 @@ function generateControls(): OrbitControls {
 
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
     const planeGeometry = new PlaneGeometry( 60, 60 );
-    const planeMaterial = new MeshLambertMaterial( {color: 0xff5733, side: DoubleSide} );
+    const planeMaterial = new MeshLambertMaterial( {color: 0xa9c388, side: DoubleSide} );
     const plane = new Mesh( planeGeometry, planeMaterial );
     plane.position.set(0, -10, 0);
     plane.rotateX( - Math.PI / 2);
     plane.receiveShadow = true;
     return plane;
-}
-
-function generateSphere(): Mesh<BufferGeometry, MeshPhongMaterial> {
-    const geometry = new SphereGeometry( 5, 64, 64 );
-    const material = new MeshPhongMaterial( {color: 0x338dff} );
-    material.shininess = 50;
-    material.specular = new Color(0x0088ff);
-    const sphere = new Mesh( geometry, material );
-    sphere.position.set(-10, 0, 0);
-    return sphere;
 }
 
 function onKeyDown(event: any): void{
