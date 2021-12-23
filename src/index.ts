@@ -1,6 +1,7 @@
 import { 
   AmbientLight,
   AxesHelper,
+  BoxBufferGeometry,
   BufferGeometry,
   Clock,
   Color,
@@ -11,6 +12,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
+  MeshStandardMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
   PlaneGeometry,
@@ -40,7 +42,7 @@ function startup(): void {
     const ground = generatePlane();
     scene.add(ground);
     
-    const house = new Group();
+    const house = generateHouse();
     scene.add(house);
 
     const ambientLight = new AmbientLight( 0x404040, 2 );
@@ -174,11 +176,28 @@ function generateControls(): OrbitControls {
     return controls;
 }
 
+function generateHouse(): Group {
+    const house = new Group();
+
+    const walls = generateWalls();
+    house.add(walls);
+
+    return house;
+}
+
+function generateWalls(): Mesh {
+    const geometry = new BoxBufferGeometry(4, 3, 4);
+    const material = new MeshStandardMaterial({ 'color': '0xac8e82'});
+    const walls = new Mesh(geometry, material);
+    walls.position.set(5, -1.5, 0);
+    return walls;
+}
+
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
     const planeGeometry = new PlaneGeometry( 60, 60 );
     const planeMaterial = new MeshLambertMaterial( {color: 0xa9c388, side: DoubleSide} );
     const plane = new Mesh( planeGeometry, planeMaterial );
-    plane.position.set(0, -10, 0);
+    plane.position.set(0, -3, 0);
     plane.rotateX( - Math.PI / 2);
     plane.receiveShadow = true;
     return plane;
