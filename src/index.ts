@@ -5,6 +5,7 @@ import {
   BufferGeometry,
   Clock,
   Color,
+  ConeBufferGeometry,
   DoubleSide,
   Group,
   Light,
@@ -182,15 +183,27 @@ function generateHouse(): Group {
     const walls = generateWalls();
     house.add(walls);
 
+    const roof = generateRoof();
+    house.add(roof);
+
     return house;
 }
 
 function generateWalls(): Mesh {
     const geometry = new BoxBufferGeometry(4, 3, 4);
-    const material = new MeshStandardMaterial({ 'color': '0xac8e82'});
+    const material = new MeshStandardMaterial({ color: '#ac8e00' });
     const walls = new Mesh(geometry, material);
     walls.position.set(5, -1.5, 0);
     return walls;
+}
+
+function generateRoof(): Mesh {
+    const geometry = new ConeBufferGeometry(3.5, 1, 4);
+    const material = new MeshStandardMaterial({ color: '#b35f45' });
+    const roof = new Mesh(geometry, material);
+    roof.position.set(5, 0.5, 0);
+    roof.rotation.set(0, Math.PI / 4, 0);
+    return roof;
 }
 
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
