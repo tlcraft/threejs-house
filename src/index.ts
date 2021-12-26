@@ -46,7 +46,7 @@ function startup(): void {
     const house = generateHouse();
     scene.add(house);
 
-    const ambientLight = new AmbientLight( 0x404040, 2 );
+    const ambientLight = new AmbientLight( 0x404040, 2.5 );
     scene.add(ambientLight);
 
     const animate = function () {
@@ -210,7 +210,7 @@ function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
     const planeGeometry = new PlaneGeometry( 60, 60 );
     const planeMaterial = new MeshLambertMaterial( {color: 0xa9c388, side: DoubleSide} );
     const plane = new Mesh( planeGeometry, planeMaterial );
-    plane.position.set(0, -3, 0);
+    plane.position.set(0, -3.01, 0);
     plane.rotateX( - Math.PI / 2);
     plane.receiveShadow = true;
     return plane;
