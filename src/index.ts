@@ -18,6 +18,7 @@ import {
   PerspectiveCamera,
   PlaneGeometry,
   Scene,
+  SphereBufferGeometry,
   WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -45,6 +46,11 @@ function startup(): void {
     
     const house = generateHouse();
     scene.add(house);
+
+    const bush = generateBush();
+    bush.scale.set(0.5, 0.5, 0.5);
+    bush.position.set(3, -2.8, 2.5);
+    scene.add(bush);
 
     const ambientLight = new AmbientLight( 0x404040, 2.5 );
     scene.add(ambientLight);
@@ -204,6 +210,13 @@ function generateRoof(): Mesh {
     roof.position.set(5, 0.5, 0);
     roof.rotation.set(0, Math.PI / 4, 0);
     return roof;
+}
+
+function generateBush(): Mesh {
+    const geometry = new SphereBufferGeometry(1, 16, 16);
+    const material = new MeshStandardMaterial({color: "#89c854" });
+    const bush = new Mesh(geometry, material);
+    return bush;
 }
 
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
