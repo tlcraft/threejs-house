@@ -16,6 +16,7 @@ import {
   MeshStandardMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
+  PlaneBufferGeometry,
   PlaneGeometry,
   Scene,
   SphereBufferGeometry,
@@ -192,6 +193,9 @@ function generateHouse(): Group {
     const roof = generateRoof();
     house.add(roof);
 
+    const door = generateDoor();
+    house.add(door);
+
     return house;
 }
 
@@ -210,6 +214,14 @@ function generateRoof(): Mesh {
     roof.position.set(5, 0.5, 0);
     roof.rotation.set(0, Math.PI / 4, 0);
     return roof;
+}
+
+function generateDoor(): Mesh {
+    const geometry = new PlaneBufferGeometry(1, 2);
+    const material = new MeshStandardMaterial({ color: '##aa7b7b', side: DoubleSide });
+    const door = new Mesh(geometry, material);
+    door.position.set(4.85, -2, 2.01);
+    return door; 
 }
 
 function generateBush(): Mesh {
