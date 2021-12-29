@@ -50,8 +50,11 @@ function startup(): void {
 
     const bush = generateBush();
     bush.scale.set(0.5, 0.5, 0.5);
-    bush.position.set(3, -2.8, 2.5);
+    bush.position.set(6.5, -2.8, 2.5);
     scene.add(bush);
+
+    const largeBush = generateLargeBush();
+    scene.add(largeBush);
 
     const ambientLight = new AmbientLight( 0x404040, 2.5 );
     scene.add(ambientLight);
@@ -229,6 +232,24 @@ function generateBush(): Mesh {
     const material = new MeshStandardMaterial({color: "#89c854" });
     const bush = new Mesh(geometry, material);
     return bush;
+}
+
+function generateLargeBush(): Group {
+    const bushGroup = new Group();
+    
+    const largeBush = generateBush();
+    largeBush.scale.set(0.65, 0.65, 0.65);
+    largeBush.position.set(3, -2.8, 2.5);
+
+    bushGroup.add(largeBush);
+
+    const smallBush = generateBush();
+    smallBush.scale.set(0.5, 0.5, 0.5);
+    smallBush.position.set(3.7, -3, 2.5);
+
+    bushGroup.add(smallBush);
+
+    return bushGroup;
 }
 
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
