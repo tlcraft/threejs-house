@@ -7,8 +7,11 @@ import {
   Color,
   ConeBufferGeometry,
   DoubleSide,
+  EdgesGeometry,
   Group,
   Light,
+  LineBasicMaterial,
+  LineSegments,
   Material,
   Mesh,
   MeshBasicMaterial,
@@ -193,6 +196,9 @@ function generateHouse(): Group {
     const walls = generateWalls();
     house.add(walls);
 
+    const edges = generateWallEdges(walls);
+    house.add(edges);
+
     const roof = generateRoof();
     house.add(roof);
 
@@ -208,6 +214,14 @@ function generateWalls(): Mesh {
     const walls = new Mesh(geometry, material);
     walls.position.set(5, -1.5, 0);
     return walls;
+}
+
+function generateWallEdges(walls: Mesh): LineSegments {
+    const geometry = new EdgesGeometry(walls.geometry);
+    const material = new LineBasicMaterial({color: '#cc8e00', linewidth: 2 });
+    const edges = new LineSegments( geometry, material);
+    edges.position.set(walls.position.x, walls.position.y, walls.position.z);
+    return edges;
 }
 
 function generateRoof(): Mesh {
