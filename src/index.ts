@@ -202,6 +202,9 @@ function generateHouse(): Group {
     const roof = generateRoof();
     house.add(roof);
 
+    const roofEdges = generateWallEdges(roof);
+    house.add(roofEdges);
+
     const door = generateDoor();
     house.add(door);
 
@@ -221,6 +224,7 @@ function generateWallEdges(walls: Mesh): LineSegments {
     const material = new LineBasicMaterial({color: '#cc8e00', linewidth: 2 });
     const edges = new LineSegments( geometry, material);
     edges.position.set(walls.position.x, walls.position.y, walls.position.z);
+    edges.rotation.set(walls.rotation.x, walls.rotation.y, walls.rotation.z);
     return edges;
 }
 
