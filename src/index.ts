@@ -170,7 +170,7 @@ function generateScene(): Scene {
 function generatePerspectivCamera(): PerspectiveCamera { // Vision like a cone
     // A field of view between 45 and 75 is generally sufficent depending on your needs
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.setZ(25);
+    camera.position.setZ(10);
     return camera;
 }
 
