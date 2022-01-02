@@ -196,13 +196,13 @@ function generateHouse(): Group {
     const walls = generateWalls();
     house.add(walls);
 
-    const edges = generateWallEdges(walls);
+    const edges = generateMeshEdges(walls);
     house.add(edges);
 
     const roof = generateRoof();
     house.add(roof);
 
-    const roofEdges = generateWallEdges(roof);
+    const roofEdges = generateMeshEdges(roof, '#c45f45');
     house.add(roofEdges);
 
     const door = generateDoor();
@@ -219,12 +219,12 @@ function generateWalls(): Mesh {
     return walls;
 }
 
-function generateWallEdges(walls: Mesh): LineSegments {
-    const geometry = new EdgesGeometry(walls.geometry);
-    const material = new LineBasicMaterial({color: '#cc8e00', linewidth: 2 });
-    const edges = new LineSegments( geometry, material);
-    edges.position.set(walls.position.x, walls.position.y, walls.position.z);
-    edges.rotation.set(walls.rotation.x, walls.rotation.y, walls.rotation.z);
+function generateMeshEdges(mesh: Mesh, color: string = '#cc8e00', linewidth:  number = 2): LineSegments {
+    const geometry = new EdgesGeometry(mesh.geometry);
+    const material = new LineBasicMaterial({ color, linewidth });
+    const edges = new LineSegments(geometry, material);
+    edges.position.set(mesh.position.x, mesh.position.y, mesh.position.z);
+    edges.rotation.set(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
     return edges;
 }
 
