@@ -59,6 +59,9 @@ function startup(): void {
     const largeBush = generateLargeBush();
     scene.add(largeBush);
 
+    const graves = generateGraves();
+    scene.add(graves);
+
     const ambientLight = new AmbientLight( 0x404040, 2.5 );
     scene.add(ambientLight);
 
@@ -268,6 +271,25 @@ function generateLargeBush(): Group {
     bushGroup.add(smallBush);
 
     return bushGroup;
+}
+
+function generateGraves(): Group {
+    const graves = new Group();
+
+    const geometry = new BoxBufferGeometry(0.6, 0.8, 0.3);
+    const material = new MeshStandardMaterial({ "color": "#b2b6b2" });
+
+    for(let i = 0; i < 10; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const x = Math.sin(angle) * 7;
+        const z = Math.cos(angle) * 7;
+
+        const grave = new Mesh(geometry, material);
+        grave.position.set(x + 4, -2.66, z);
+        graves.add(grave);
+    }
+
+    return graves;
 }
 
 function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
