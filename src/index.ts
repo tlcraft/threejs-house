@@ -279,7 +279,7 @@ function generateGraves(): Group {
     const geometry = new BoxBufferGeometry(0.6, 0.8, 0.3);
     const material = new MeshStandardMaterial({ "color": "#b2b6b2" });
 
-    for(let i = 0; i < 15; i++) {
+    for(let i = 0; i < 20; i++) {
         const angle = Math.random() * Math.PI * 2;
         const radius = 4 + Math.random() * 7;
         const x = Math.sin(angle) * radius;
@@ -288,6 +288,8 @@ function generateGraves(): Group {
         const grave = new Mesh(geometry, material);
         grave.position.set(x + 4, -2.66, z);
         graves.add(grave);
+        const edges = generateMeshEdges(grave, "#000000");
+        scene.add(edges);
     }
 
     return graves;
