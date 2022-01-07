@@ -287,6 +287,8 @@ function generateGraves(): Group {
 
         const grave = new Mesh(geometry, material);
         grave.position.set(x + 4, -2.66, z);
+        grave.rotation.y = (Math.random() - 0.5) * 0.3;
+        grave.rotation.z = (Math.random() - 0.3) * 0.2;
         graves.add(grave);
         const edges = generateMeshEdges(grave, "#000000");
         scene.add(edges);
