@@ -21,6 +21,7 @@ import {
   PerspectiveCamera,
   PlaneBufferGeometry,
   PlaneGeometry,
+  PointLight,
   Scene,
   SphereBufferGeometry,
   WebGLRenderer
@@ -64,6 +65,9 @@ function startup(): void {
 
     const ambientLight = new AmbientLight( "#b9d5ff", 0.2 );
     scene.add(ambientLight);
+
+    const houseLight = generateHouseLight();
+    scene.add(houseLight);
 
     const animate = function () {
         requestAnimationFrame(animate);
@@ -246,6 +250,12 @@ function generateDoor(): Mesh {
     const door = new Mesh(geometry, material);
     door.position.set(4.85, -2, 2.01);
     return door; 
+}
+
+function generateHouseLight(): Light {
+    const houseLight = new PointLight("#ff7d46", 1, 7);
+    houseLight.position.set(4.85, -0.9, 2.3);
+    return houseLight;
 }
 
 function generateBush(): Mesh {
