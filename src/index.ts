@@ -62,7 +62,7 @@ function startup(): void {
     const graves = generateGraves();
     scene.add(graves);
 
-    const ambientLight = new AmbientLight( 0x404040, 2.5 );
+    const ambientLight = new AmbientLight( "#b9d5ff", 0.2 );
     scene.add(ambientLight);
 
     const animate = function () {
@@ -166,7 +166,7 @@ function configureLightDebug(light: Light, name: string): void {
 
 function generateScene(): Scene {
     const scene = new Scene();
-    scene.background = new Color( 0xcccccc );
+    scene.background = new Color( 0x000000 );
     return scene;
 }
 
@@ -205,7 +205,7 @@ function generateHouse(): Group {
     const roof = generateRoof();
     house.add(roof);
 
-    const roofEdges = generateMeshEdges(roof, '#c45f45');
+    const roofEdges = generateMeshEdges(roof);
     house.add(roofEdges);
 
     const door = generateDoor();
@@ -222,7 +222,7 @@ function generateWalls(): Mesh {
     return walls;
 }
 
-function generateMeshEdges(mesh: Mesh, color: string = '#cc8e00', linewidth:  number = 2): LineSegments {
+function generateMeshEdges(mesh: Mesh, color: string = '#000000', linewidth:  number = 2): LineSegments {
     const geometry = new EdgesGeometry(mesh.geometry);
     const material = new LineBasicMaterial({ color, linewidth });
     const edges = new LineSegments(geometry, material);
