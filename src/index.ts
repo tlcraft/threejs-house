@@ -4,10 +4,10 @@ import {
   BoxBufferGeometry,
   BufferGeometry,
   Clock,
-  Color,
   ConeBufferGeometry,
   DoubleSide,
   EdgesGeometry,
+  Fog,
   Group,
   Light,
   LineBasicMaterial,
@@ -68,6 +68,9 @@ function startup(): void {
 
     const houseLight = generateHouseLight();
     scene.add(houseLight);
+
+    const fog = generateFog();
+    scene.fog = fog;
 
     const animate = function () {
         requestAnimationFrame(animate);
@@ -170,7 +173,6 @@ function configureLightDebug(light: Light, name: string): void {
 
 function generateScene(): Scene {
     const scene = new Scene();
-    scene.background = new Color( 0x000000 );
     return scene;
 }
 
@@ -188,6 +190,7 @@ function generateRenderer(): WebGLRenderer {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+    renderer.setClearColor("#262837");
     return renderer;
 }
 
@@ -256,6 +259,11 @@ function generateHouseLight(): Light {
     const houseLight = new PointLight("#ff7d46", 1, 7);
     houseLight.position.set(4.85, -0.9, 2.3);
     return houseLight;
+}
+
+function generateFog(): Fog {
+    const fog = new Fog("#262837", 1, 15);
+    return fog;
 }
 
 function generateBush(): Mesh {
