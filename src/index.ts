@@ -24,9 +24,11 @@ import {
   PointLight,
   Scene,
   SphereBufferGeometry,
+  TextureLoader,
   WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { door, doorAmbientOcclusion, doorHeight, doorMetallic, doorNormal, doorOpacity, doorRoughness } from '~textures';
 import * as dat from 'dat.gui';
 import { Cursor } from '~models/cursor';
 
@@ -37,6 +39,14 @@ const cursor: Cursor = { x: 1, y: 1 };
 const scene = generateScene();
 const camera = generatePerspectivCamera();
 const renderer = generateRenderer();
+const textureLoader = new TextureLoader();
+const doorTexture = textureLoader.load(door);
+const doorAmbientOcclusionTexture = textureLoader.load(doorAmbientOcclusion);
+const doorHeightTexture = textureLoader.load(doorHeight);
+const doorMetallicTexture = textureLoader.load(doorMetallic);
+const doorNormalTexture = textureLoader.load(doorNormal);
+const doorOpacityTexture = textureLoader.load(doorOpacity);
+const doorRoughnessTexture = textureLoader.load(doorRoughness);
 
 function startup(): void {
     const controls = generateControls();
@@ -249,7 +259,9 @@ function generateRoof(): Mesh {
 
 function generateDoor(): Mesh {
     const geometry = new PlaneBufferGeometry(1, 2);
-    const material = new MeshStandardMaterial({ color: '##aa7b7b', side: DoubleSide });
+    const material = new MeshStandardMaterial({ 
+        map: doorTexture
+     });
     const door = new Mesh(geometry, material);
     door.position.set(4.85, -2, 2.01);
     return door; 
