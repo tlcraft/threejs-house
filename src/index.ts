@@ -268,7 +268,7 @@ function generateDoor(): Mesh {
      });
     const door = new Mesh(geometry, material);
     door.position.set(4.85, -2, 2.01);
-    door.geometry.setAttribute("uv2", new Float32BufferAttribute(door.geometry.attributes.uv.array, 2))
+    door.geometry.setAttribute("uv2", new Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
     return door; 
 }
 
