@@ -259,12 +259,14 @@ function generateRoof(): Mesh {
 }
 
 function generateDoor(): Mesh {
-    const geometry = new PlaneBufferGeometry(1.75, 2.1);
+    const geometry = new PlaneBufferGeometry(1.75, 2.1, 10, 10);
     const material = new MeshStandardMaterial({ 
         map: doorTexture,
         transparent: true,
         alphaMap: doorOpacityTexture,
         aoMap: doorAmbientOcclusionTexture,
+        displacementMap: doorHeightTexture,
+        displacementScale: 0.1
      });
     const door = new Mesh(geometry, material);
     door.position.set(4.85, -2, 2.01);
