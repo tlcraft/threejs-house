@@ -29,7 +29,20 @@ import {
   WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { door, doorAmbientOcclusion, doorHeight, doorMetallic, doorNormal, doorOpacity, doorRoughness } from '~textures';
+import { 
+    brickAmbientOcclusion, 
+    brickBaseColor, 
+    brickHeight, 
+    brickNormal, 
+    brickRoughness,
+    door, 
+    doorAmbientOcclusion, 
+    doorHeight, 
+    doorMetallic, 
+    doorNormal, 
+    doorOpacity, 
+    doorRoughness 
+} from '~textures';
 import * as dat from 'dat.gui';
 import { Cursor } from '~models/cursor';
 
@@ -41,6 +54,13 @@ const scene = generateScene();
 const camera = generatePerspectivCamera();
 const renderer = generateRenderer();
 const textureLoader = new TextureLoader();
+
+const brickAmbientOcclusionTexture = textureLoader.load(brickAmbientOcclusion);
+const brickBaseColorTexture = textureLoader.load(brickBaseColor);
+const brickHeightTexture = textureLoader.load(brickHeight);
+const brickNormalTexture = textureLoader.load(brickNormal);
+const brickRoughnessTexture = textureLoader.load(brickRoughness);
+
 const doorTexture = textureLoader.load(door);
 const doorAmbientOcclusionTexture = textureLoader.load(doorAmbientOcclusion);
 const doorHeightTexture = textureLoader.load(doorHeight);
