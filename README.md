@@ -9,3 +9,7 @@ Sample project for learning more about three.js.
 ## Brick Texture
 
 [Source](https://3dtextures.me/2020/09/17/brick-wall-019/)
+
+## Grass Texture  
+
+[Source](https://3dtextures.me/2020/08/28/grass-005/)
