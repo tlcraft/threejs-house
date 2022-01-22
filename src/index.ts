@@ -254,9 +254,17 @@ function generateHouse(): Group {
 
 function generateWalls(): Mesh {
     const geometry = new BoxBufferGeometry(4, 3, 4);
-    const material = new MeshStandardMaterial({ color: '#ac8e00' });
+    const material = new MeshStandardMaterial({ 
+        map: brickBaseColorTexture,
+        aoMap: brickAmbientOcclusionTexture,
+        normalMap: brickNormalTexture,
+        roughnessMap: brickRoughnessTexture,
+        displacementMap: brickHeightTexture,
+        displacementScale: 0.01
+     });
     const walls = new Mesh(geometry, material);
     walls.position.set(5, -1.5, 0);
+    walls.geometry.setAttribute("uv2", new Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
     return walls;
 }
 
