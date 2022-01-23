@@ -10,6 +10,11 @@ import doorMetallic from './door/Door_Wood_001_metallic.jpg';
 import doorNormal from './door/Door_Wood_001_normal.jpg';
 import doorOpacity from './door/Door_Wood_001_opacity.jpg';
 import doorRoughness from './door/Door_Wood_001_roughness.jpg';
+import grassAmbientOcclusion from './grass/Grass_005_AmbientOcclusion.jpg'
+import grassBaseColor from './grass/Grass_005_BaseColor.jpg'
+import grassHeight from './grass/Grass_005_Height.png'
+import grassNormal from './grass/Grass_005_Normal.jpg'
+import grassRoughness from './grass/Grass_005_Roughness.jpg'
 
 export {
     brickAmbientOcclusion,
@@ -23,5 +28,10 @@ export {
     doorMetallic,
     doorNormal,
     doorOpacity,
-    doorRoughness
+    doorRoughness,
+    grassAmbientOcclusion,
+    grassBaseColor,
+    grassHeight,
+    grassNormal,
+    grassRoughness,
 }
