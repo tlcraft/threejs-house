@@ -5,7 +5,6 @@ import {
   BufferGeometry,
   Clock,
   ConeBufferGeometry,
-  DoubleSide,
   EdgesGeometry,
   Float32BufferAttribute,
   Fog,
@@ -41,7 +40,12 @@ import {
     doorMetallic, 
     doorNormal, 
     doorOpacity, 
-    doorRoughness 
+    doorRoughness,
+    grassAmbientOcclusion, 
+    grassBaseColor, 
+    grassHeight, 
+    grassNormal, 
+    grassRoughness,
 } from '~textures';
 import * as dat from 'dat.gui';
 import { Cursor } from '~models/cursor';
@@ -68,6 +72,12 @@ const doorMetallicTexture = textureLoader.load(doorMetallic);
 const doorNormalTexture = textureLoader.load(doorNormal);
 const doorOpacityTexture = textureLoader.load(doorOpacity);
 const doorRoughnessTexture = textureLoader.load(doorRoughness);
+
+const grassBaseColorTexture = textureLoader.load(grassBaseColor);
+const grassAmbientOcclusionTexture = textureLoader.load(grassAmbientOcclusion);
+const grassHeightTexture = textureLoader.load(grassHeight);
+const grassNormalTexture = textureLoader.load(grassNormal);
+const grassRoughnessTexture = textureLoader.load(grassRoughness);
 
 function startup(): void {
     const controls = generateControls();
@@ -365,13 +375,22 @@ function generateGraves(): Group {
     return graves;
 }
 
-function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
+function generatePlane(): Mesh<BufferGeometry, MeshStandardMaterial> {
     const planeGeometry = new PlaneGeometry( 60, 60 );
-    const planeMaterial = new MeshLambertMaterial( {color: 0xa9c388, side: DoubleSide} );
+    const planeMaterial = new MeshStandardMaterial( { 
+        map: grassBaseColorTexture, 
+        aoMap: grassAmbientOcclusionTexture,
+        normalMap: grassNormalTexture,
+        roughnessMap: grassRoughnessTexture,
+        displacementMap: grassHeightTexture,
+        displacementScale: 0.05
+
+    } );
     const plane = new Mesh( planeGeometry, planeMaterial );
     plane.position.set(0, -3.01, 0);
     plane.rotateX( - Math.PI / 2);
     plane.receiveShadow = true;
+    plane.geometry.setAttribute("uv2", new Float32BufferAttribute(plane.geometry.attributes.uv.array, 2));
     return plane;
 }
 
