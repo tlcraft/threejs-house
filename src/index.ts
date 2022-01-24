@@ -22,6 +22,7 @@ import {
   PlaneBufferGeometry,
   PlaneGeometry,
   PointLight,
+  RepeatWrapping,
   Scene,
   SphereBufferGeometry,
   TextureLoader,
@@ -74,10 +75,25 @@ const doorOpacityTexture = textureLoader.load(doorOpacity);
 const doorRoughnessTexture = textureLoader.load(doorRoughness);
 
 const grassBaseColorTexture = textureLoader.load(grassBaseColor);
+grassBaseColorTexture.repeat.set(8, 8);
+grassBaseColorTexture.wrapS = RepeatWrapping;
+grassBaseColorTexture.wrapT = RepeatWrapping;
 const grassAmbientOcclusionTexture = textureLoader.load(grassAmbientOcclusion);
+grassAmbientOcclusionTexture.repeat.set(8, 8);
+grassAmbientOcclusionTexture.wrapS = RepeatWrapping;
+grassAmbientOcclusionTexture.wrapT = RepeatWrapping;
 const grassHeightTexture = textureLoader.load(grassHeight);
+grassHeightTexture.repeat.set(8, 8);
+grassHeightTexture.wrapS = RepeatWrapping;
+grassHeightTexture.wrapT = RepeatWrapping;
 const grassNormalTexture = textureLoader.load(grassNormal);
+grassNormalTexture.repeat.set(8, 8);
+grassNormalTexture.wrapS = RepeatWrapping;
+grassNormalTexture.wrapT = RepeatWrapping;
 const grassRoughnessTexture = textureLoader.load(grassRoughness);
+grassRoughnessTexture.repeat.set(8, 8);
+grassRoughnessTexture.wrapS = RepeatWrapping;
+grassRoughnessTexture.wrapT = RepeatWrapping;
 
 function startup(): void {
     const controls = generateControls();
