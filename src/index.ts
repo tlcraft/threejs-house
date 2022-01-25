@@ -25,6 +25,7 @@ import {
   RepeatWrapping,
   Scene,
   SphereBufferGeometry,
+  Texture,
   TextureLoader,
   WebGLRenderer
 } from 'three';
@@ -74,26 +75,19 @@ const doorNormalTexture = textureLoader.load(doorNormal);
 const doorOpacityTexture = textureLoader.load(doorOpacity);
 const doorRoughnessTexture = textureLoader.load(doorRoughness);
 
-const grassBaseColorTexture = textureLoader.load(grassBaseColor);
-grassBaseColorTexture.repeat.set(8, 8);
-grassBaseColorTexture.wrapS = RepeatWrapping;
-grassBaseColorTexture.wrapT = RepeatWrapping;
-const grassAmbientOcclusionTexture = textureLoader.load(grassAmbientOcclusion);
-grassAmbientOcclusionTexture.repeat.set(8, 8);
-grassAmbientOcclusionTexture.wrapS = RepeatWrapping;
-grassAmbientOcclusionTexture.wrapT = RepeatWrapping;
-const grassHeightTexture = textureLoader.load(grassHeight);
-grassHeightTexture.repeat.set(8, 8);
-grassHeightTexture.wrapS = RepeatWrapping;
-grassHeightTexture.wrapT = RepeatWrapping;
-const grassNormalTexture = textureLoader.load(grassNormal);
-grassNormalTexture.repeat.set(8, 8);
-grassNormalTexture.wrapS = RepeatWrapping;
-grassNormalTexture.wrapT = RepeatWrapping;
-const grassRoughnessTexture = textureLoader.load(grassRoughness);
-grassRoughnessTexture.repeat.set(8, 8);
-grassRoughnessTexture.wrapS = RepeatWrapping;
-grassRoughnessTexture.wrapT = RepeatWrapping;
+const grassBaseColorTexture = configureTexture(grassBaseColor);
+const grassAmbientOcclusionTexture = configureTexture(grassAmbientOcclusion);
+const grassHeightTexture = configureTexture(grassHeight);
+const grassNormalTexture = configureTexture(grassNormal);
+const grassRoughnessTexture =configureTexture(grassRoughness);
+
+function configureTexture(textureImage: string): Texture {
+    const texture = textureLoader.load(textureImage);
+    texture.repeat.set(8, 8);
+    texture.wrapS = RepeatWrapping;
+    texture.wrapT = RepeatWrapping;
+    return texture;
+}
 
 function startup(): void {
     const controls = generateControls();
