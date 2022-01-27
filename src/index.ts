@@ -120,13 +120,21 @@ function startup(): void {
     const houseLight = generateHouseLight();
     scene.add(houseLight);
 
+    const ghost = generateGhost({ color: "#ff00ff", x: -1, y: -1, z: 2 });
+    scene.add(ghost);
+
     const fog = generateFog();
     scene.fog = fog;
 
     const animate = function () {
         requestAnimationFrame(animate);
 
-        //const delta = clock.getDelta();
+        const elapsedTime = clock.getElapsedTime();
+
+        const ghostAngle = elapsedTime * 0.5;
+        ghost.position.x = Math.cos(ghostAngle) * 4;
+        ghost.position.y = Math.sin(ghostAngle) * 3;
+        ghost.position.z = Math.sin(ghostAngle) * 4;
 
         // Alternative control schemes
         // camera.position.x = cursor.x * 100;
@@ -383,6 +391,12 @@ function generateGraves(): Group {
     }
 
     return graves;
+}
+
+function generateGhost({ color, x, y, z }: { color: string, x: number, y: number, z: number }): PointLight {
+    const ghost = new PointLight(color, 2, 3);
+    ghost.position.set(x, y, z);
+    return ghost;
 }
 
 function generatePlane(): Mesh<BufferGeometry, MeshStandardMaterial> {
