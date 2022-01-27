@@ -120,8 +120,11 @@ function startup(): void {
     const houseLight = generateHouseLight();
     scene.add(houseLight);
 
-    const ghost = generateGhost({ color: "#ff00ff", x: -1, y: -1, z: 2 });
-    scene.add(ghost);
+    const purpleGhost = generateGhost({ color: "#ff00ff", x: -1, y: -1, z: 2 });
+    scene.add(purpleGhost);
+
+    const greenGhost = generateGhost({ color: "#00FF00", x: 1, y: 0, z: 1 });
+    scene.add(greenGhost);
 
     const fog = generateFog();
     scene.fog = fog;
@@ -132,9 +135,13 @@ function startup(): void {
         const elapsedTime = clock.getElapsedTime();
 
         const ghostAngle = elapsedTime * 0.5;
-        ghost.position.x = Math.cos(ghostAngle) * 4;
-        ghost.position.y = Math.sin(ghostAngle) * 3;
-        ghost.position.z = Math.sin(ghostAngle) * 4;
+        purpleGhost.position.x = Math.cos(ghostAngle) * 4;
+        purpleGhost.position.y = Math.sin(ghostAngle) * 3;
+        purpleGhost.position.z = Math.sin(ghostAngle) * 4;
+
+        greenGhost.position.x = Math.cos(ghostAngle) * 2;
+        greenGhost.position.y = Math.sin(ghostAngle) * 4;
+        greenGhost.position.z = Math.sin(ghostAngle) * 2;
 
         // Alternative control schemes
         // camera.position.x = cursor.x * 100;
