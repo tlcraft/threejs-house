@@ -141,7 +141,7 @@ function startup(): void {
 
         const greenGhostAngle = -elapsedTime * 0.25;
         greenGhost.position.x = 4 + Math.cos(greenGhostAngle) * 2;
-        greenGhost.position.y = Math.sin(greenGhostAngle) * 4;
+        greenGhost.position.y = Math.sin(greenGhostAngle) * 4 + Math.sin(greenGhostAngle) * 4;
         greenGhost.position.z = Math.sin(greenGhostAngle) * 2;
 
         // Alternative control schemes
