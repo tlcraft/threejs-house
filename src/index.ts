@@ -126,6 +126,9 @@ function startup(): void {
     const greenGhost = generateGhost({ color: "#00FF00", x: 0, y: 0, z: 0 });
     scene.add(greenGhost);
 
+    const blueGhost = generateGhost({ color: "#0000FF", x: 0, y: 0, z: 0 });
+    scene.add(blueGhost);
+
     const fog = generateFog();
     scene.fog = fog;
 
@@ -143,6 +146,11 @@ function startup(): void {
         greenGhost.position.x = 4 + Math.cos(greenGhostAngle) * 2;
         greenGhost.position.y = Math.sin(greenGhostAngle) * 4 + Math.sin(greenGhostAngle) * 4;
         greenGhost.position.z = Math.sin(greenGhostAngle) * 2;
+
+        const blueGhostAngle = elapsedTime * 0.20;
+        blueGhost.position.x = 5 + Math.cos(blueGhostAngle) * 4;
+        blueGhost.position.y = Math.sin(blueGhostAngle) * 3;
+        blueGhost.position.z = Math.sin(blueGhostAngle) * 4;
 
         // Alternative control schemes
         // camera.position.x = cursor.x * 100;
