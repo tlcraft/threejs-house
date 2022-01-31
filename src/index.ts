@@ -139,18 +139,18 @@ function startup(): void {
 
         const purpleGhostAngle = elapsedTime * 0.5;
         purpleGhost.position.x = 5 + Math.cos(purpleGhostAngle) * 4;
-        purpleGhost.position.y = Math.sin(purpleGhostAngle) * 3;
+        purpleGhost.position.y = Math.sin(purpleGhostAngle * 3);
         purpleGhost.position.z = Math.sin(purpleGhostAngle) * 4;
 
         const greenGhostAngle = -elapsedTime * 0.25;
         greenGhost.position.x = 4 + Math.cos(greenGhostAngle) * 2;
-        greenGhost.position.y = Math.sin(greenGhostAngle) * 4 + Math.sin(greenGhostAngle) * 4;
+        greenGhost.position.y = Math.sin(greenGhostAngle) * 4 + Math.sin(greenGhostAngle) * 2;
         greenGhost.position.z = Math.sin(greenGhostAngle) * 2;
 
         const blueGhostAngle = elapsedTime * 0.20;
-        blueGhost.position.x = 5 + Math.cos(blueGhostAngle) * 4;
-        blueGhost.position.y = Math.sin(blueGhostAngle) * 3;
-        blueGhost.position.z = Math.sin(blueGhostAngle) * 4;
+        blueGhost.position.x = 5 + Math.cos(blueGhostAngle) * (5 + Math.sin(elapsedTime * 0.5));
+        blueGhost.position.y = Math.sin(blueGhostAngle * 3) * Math.sin(elapsedTime * 3);
+        blueGhost.position.z = Math.sin(blueGhostAngle) * (5 + Math.sin(greenGhostAngle * 2));
 
         // Alternative control schemes
         // camera.position.x = cursor.x * 100;
