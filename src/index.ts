@@ -308,6 +308,8 @@ function generateWalls(): Mesh {
      });
     const walls = new Mesh(geometry, material);
     walls.position.set(5, -1.5, 0);
+    walls.castShadow = true;
+    walls.receiveShadow = true;
     walls.geometry.setAttribute("uv2", new Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
     return walls;
 }
@@ -325,6 +327,8 @@ function generateRoof(): Mesh {
     const geometry = new ConeBufferGeometry(3.5, 1, 4);
     const material = new MeshStandardMaterial({ color: '#b35f45' });
     const roof = new Mesh(geometry, material);
+    roof.castShadow = true;
+    roof.receiveShadow = true;
     roof.position.set(5, 0.5, 0);
     roof.rotation.set(0, Math.PI / 4, 0);
     return roof;
@@ -344,6 +348,8 @@ function generateDoor(): Mesh {
         roughnessMap: doorRoughnessTexture
      });
     const door = new Mesh(geometry, material);
+    door.castShadow = true;
+    door.receiveShadow = true;
     door.position.set(4.85, -2, 2.01);
     door.geometry.setAttribute("uv2", new Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
     return door; 
@@ -352,6 +358,7 @@ function generateDoor(): Mesh {
 function generateHouseLight(): Light {
     const houseLight = new PointLight("#ff7d46", 1, 7);
     houseLight.position.set(4.85, -0.9, 2.3);
+    houseLight.castShadow = true;
     return houseLight;
 }
 
@@ -364,6 +371,8 @@ function generateBush(): Mesh {
     const geometry = new SphereBufferGeometry(1, 16, 16);
     const material = new MeshStandardMaterial({color: "#89c854" });
     const bush = new Mesh(geometry, material);
+    bush.castShadow = true;
+    bush.receiveShadow = true;
     return bush;
 }
 
@@ -401,6 +410,8 @@ function generateGraves(): Group {
         grave.position.set(x + 4, -2.66, z);
         grave.rotation.y = (Math.random() - 0.5) * 0.3;
         grave.rotation.z = (Math.random() - 0.3) * 0.2;
+        grave.castShadow = true;
+        grave.receiveShadow = true;
         graves.add(grave);
         const edges = generateMeshEdges(grave, "#000000");
         scene.add(edges);
@@ -412,6 +423,7 @@ function generateGraves(): Group {
 function generateGhost({ color, x, y, z }: { color: string, x: number, y: number, z: number }): PointLight {
     const ghost = new PointLight(color, 2, 3);
     ghost.position.set(x, y, z);
+    ghost.castShadow = true;
     return ghost;
 }
 
