@@ -359,6 +359,9 @@ function generateHouseLight(): Light {
     const houseLight = new PointLight("#ff7d46", 1, 7);
     houseLight.position.set(4.85, -0.9, 2.3);
     houseLight.castShadow = true;
+    houseLight.shadow.mapSize.width = 256;
+    houseLight.shadow.mapSize.height = 256;
+    houseLight.shadow.camera.far = 7;
     return houseLight;
 }
 
@@ -424,6 +427,9 @@ function generateGhost({ color, x, y, z }: { color: string, x: number, y: number
     const ghost = new PointLight(color, 2, 3);
     ghost.position.set(x, y, z);
     ghost.castShadow = true;
+    ghost.shadow.mapSize.width = 256;
+    ghost.shadow.mapSize.height = 256;
+    ghost.shadow.camera.far = 7;
     return ghost;
 }
 
