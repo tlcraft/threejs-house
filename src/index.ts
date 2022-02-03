@@ -86,6 +86,7 @@ function configureTexture(textureImage: string): Texture {
     texture.repeat.set(8, 8);
     texture.wrapS = RepeatWrapping;
     texture.wrapT = RepeatWrapping;
+    
     return texture;
 }
 
@@ -152,15 +153,6 @@ function startup(): void {
         blueGhost.position.y = Math.sin(blueGhostAngle * 3) * Math.sin(elapsedTime * 3);
         blueGhost.position.z = Math.sin(blueGhostAngle) * (5 + Math.sin(greenGhostAngle * 2));
 
-        // Alternative control schemes
-        // camera.position.x = cursor.x * 100;
-        // camera.position.y = cursor.y * 100;
-        
-        // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
-        // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
-        // camera.position.y = cursor.y * 5;
-        // camera.lookAt(axesHelper.position);
-
         controls.update();
         renderer.render(scene, camera);
     };
@@ -176,6 +168,7 @@ function generateDebugGui(): dat.GUI {
         width: 350,
     });
     debugGui.hide();
+
     return debugGui;
 }
 
@@ -255,6 +248,7 @@ function generatePerspectivCamera(): PerspectiveCamera { // Vision like a cone
     // A field of view between 45 and 75 is generally sufficent depending on your needs
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.position.setZ(10);
+
     return camera;
 }
 
@@ -266,6 +260,7 @@ function generateRenderer(): WebGLRenderer {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
     renderer.setClearColor("#262837");
+
     return renderer;
 }
 
@@ -306,31 +301,37 @@ function generateWalls(): Mesh {
         displacementMap: brickHeightTexture,
         displacementScale: 0.01
      });
+
     const walls = new Mesh(geometry, material);
     walls.position.set(5, -1.5, 0);
     walls.castShadow = true;
     walls.receiveShadow = true;
     walls.geometry.setAttribute("uv2", new Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
+
     return walls;
 }
 
 function generateMeshEdges(mesh: Mesh, color: string = '#000000', linewidth:  number = 2): LineSegments {
     const geometry = new EdgesGeometry(mesh.geometry);
     const material = new LineBasicMaterial({ color, linewidth });
+
     const edges = new LineSegments(geometry, material);
     edges.position.set(mesh.position.x, mesh.position.y, mesh.position.z);
     edges.rotation.set(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
+
     return edges;
 }
 
 function generateRoof(): Mesh {
     const geometry = new ConeBufferGeometry(3.5, 1, 4);
     const material = new MeshStandardMaterial({ color: '#b35f45' });
+
     const roof = new Mesh(geometry, material);
     roof.castShadow = true;
     roof.receiveShadow = true;
     roof.position.set(5, 0.5, 0);
     roof.rotation.set(0, Math.PI / 4, 0);
+
     return roof;
 }
 
@@ -347,11 +348,13 @@ function generateDoor(): Mesh {
         metalnessMap: doorMetallicTexture,
         roughnessMap: doorRoughnessTexture
      });
+
     const door = new Mesh(geometry, material);
     door.castShadow = true;
     door.receiveShadow = true;
     door.position.set(4.85, -2, 2.01);
     door.geometry.setAttribute("uv2", new Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
+    
     return door; 
 }
 
@@ -362,6 +365,7 @@ function generateHouseLight(): Light {
     houseLight.shadow.mapSize.width = 256;
     houseLight.shadow.mapSize.height = 256;
     houseLight.shadow.camera.far = 7;
+
     return houseLight;
 }
 
@@ -373,9 +377,11 @@ function generateFog(): Fog {
 function generateBush(): Mesh {
     const geometry = new SphereBufferGeometry(1, 16, 16);
     const material = new MeshStandardMaterial({color: "#89c854" });
+
     const bush = new Mesh(geometry, material);
     bush.castShadow = true;
     bush.receiveShadow = true;
+
     return bush;
 }
 
@@ -415,7 +421,9 @@ function generateGraves(): Group {
         grave.rotation.z = (Math.random() - 0.3) * 0.2;
         grave.castShadow = true;
         grave.receiveShadow = true;
+
         graves.add(grave);
+
         const edges = generateMeshEdges(grave, "#000000");
         scene.add(edges);
     }
@@ -430,6 +438,7 @@ function generateGhost({ color, x, y, z }: { color: string, x: number, y: number
     ghost.shadow.mapSize.width = 256;
     ghost.shadow.mapSize.height = 256;
     ghost.shadow.camera.far = 7;
+
     return ghost;
 }
 
@@ -444,11 +453,13 @@ function generatePlane(): Mesh<BufferGeometry, MeshStandardMaterial> {
         displacementScale: 0.05
 
     } );
+
     const plane = new Mesh( planeGeometry, planeMaterial );
     plane.position.set(0, -3.01, 0);
     plane.rotateX( - Math.PI / 2);
     plane.receiveShadow = true;
     plane.geometry.setAttribute("uv2", new Float32BufferAttribute(plane.geometry.attributes.uv.array, 2));
+
     return plane;
 }
 
