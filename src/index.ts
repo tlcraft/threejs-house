@@ -1,24 +1,54 @@
 import { 
   AmbientLight,
   AxesHelper,
+  BoxBufferGeometry,
   BufferGeometry,
   Clock,
-  Color,
-  DoubleSide,
+  ConeBufferGeometry,
+  EdgesGeometry,
+  Float32BufferAttribute,
+  Fog,
+  Group,
   Light,
+  LineBasicMaterial,
+  LineSegments,
   Material,
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
-  MeshPhongMaterial,
+  MeshStandardMaterial,
   PCFSoftShadowMap,
   PerspectiveCamera,
+  PlaneBufferGeometry,
   PlaneGeometry,
+  PointLight,
+  RepeatWrapping,
   Scene,
-  SphereGeometry,
+  SphereBufferGeometry,
+  Texture,
+  TextureLoader,
   WebGLRenderer
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { 
+    brickAmbientOcclusion, 
+    brickBaseColor, 
+    brickHeight, 
+    brickNormal, 
+    brickRoughness,
+    door, 
+    doorAmbientOcclusion, 
+    doorHeight, 
+    doorMetallic, 
+    doorNormal, 
+    doorOpacity, 
+    doorRoughness,
+    grassAmbientOcclusion, 
+    grassBaseColor, 
+    grassHeight, 
+    grassNormal, 
+    grassRoughness,
+} from '~textures';
 import * as dat from 'dat.gui';
 import { Cursor } from '~models/cursor';
 
@@ -29,6 +59,36 @@ const cursor: Cursor = { x: 1, y: 1 };
 const scene = generateScene();
 const camera = generatePerspectivCamera();
 const renderer = generateRenderer();
+const textureLoader = new TextureLoader();
+
+const brickAmbientOcclusionTexture = textureLoader.load(brickAmbientOcclusion);
+const brickBaseColorTexture = textureLoader.load(brickBaseColor);
+const brickHeightTexture = textureLoader.load(brickHeight);
+const brickNormalTexture = textureLoader.load(brickNormal);
+const brickRoughnessTexture = textureLoader.load(brickRoughness);
+
+const doorTexture = textureLoader.load(door);
+const doorAmbientOcclusionTexture = textureLoader.load(doorAmbientOcclusion);
+const doorHeightTexture = textureLoader.load(doorHeight);
+const doorMetallicTexture = textureLoader.load(doorMetallic);
+const doorNormalTexture = textureLoader.load(doorNormal);
+const doorOpacityTexture = textureLoader.load(doorOpacity);
+const doorRoughnessTexture = textureLoader.load(doorRoughness);
+
+const grassBaseColorTexture = configureTexture(grassBaseColor);
+const grassAmbientOcclusionTexture = configureTexture(grassAmbientOcclusion);
+const grassHeightTexture = configureTexture(grassHeight);
+const grassNormalTexture = configureTexture(grassNormal);
+const grassRoughnessTexture =configureTexture(grassRoughness);
+
+function configureTexture(textureImage: string): Texture {
+    const texture = textureLoader.load(textureImage);
+    texture.repeat.set(8, 8);
+    texture.wrapS = RepeatWrapping;
+    texture.wrapT = RepeatWrapping;
+    
+    return texture;
+}
 
 function startup(): void {
     const controls = generateControls();
@@ -38,36 +98,66 @@ function startup(): void {
     const container: HTMLElement | any = document.getElementById("three");
     container.appendChild( renderer.domElement );
 
-    const sphere = generateSphere();
-    scene.add(sphere);
+    const ground = generatePlane();
+    scene.add(ground);
+    
+    const house = generateHouse();
+    scene.add(house);
 
-    const plane = generatePlane();
-    scene.add(plane);
+    const bush = generateBush();
+    bush.scale.set(0.5, 0.5, 0.5);
+    bush.position.set(6.5, -2.8, 2.5);
+    scene.add(bush);
 
-    const ambientLight = new AmbientLight( 0x404040, 1 );
+    const largeBush = generateLargeBush();
+    scene.add(largeBush);
+
+    const graves = generateGraves();
+    scene.add(graves);
+
+    const ambientLight = new AmbientLight( "#b9d5ff", 0.2 );
     scene.add(ambientLight);
+
+    const houseLight = generateHouseLight();
+    scene.add(houseLight);
+
+    const purpleGhost = generateGhost({ color: "#ff00ff", x: 0, y: 0, z: 0 });
+    scene.add(purpleGhost);
+
+    const greenGhost = generateGhost({ color: "#00FF00", x: 0, y: 0, z: 0 });
+    scene.add(greenGhost);
+
+    const blueGhost = generateGhost({ color: "#0000FF", x: 0, y: 0, z: 0 });
+    scene.add(blueGhost);
+
+    const fog = generateFog();
+    scene.fog = fog;
 
     const animate = function () {
         requestAnimationFrame(animate);
 
-        const delta = clock.getDelta();
+        const elapsedTime = clock.getElapsedTime();
 
-        sphere.rotation.y += delta;
+        const purpleGhostAngle = elapsedTime * 0.5;
+        purpleGhost.position.x = 5 + Math.cos(purpleGhostAngle) * 4;
+        purpleGhost.position.y = Math.sin(purpleGhostAngle * 3);
+        purpleGhost.position.z = Math.sin(purpleGhostAngle) * 4;
 
-        // Alternative control schemes
-        // camera.position.x = cursor.x * 100;
-        // camera.position.y = cursor.y * 100;
-        
-        // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
-        // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
-        // camera.position.y = cursor.y * 5;
-        // camera.lookAt(axesHelper.position);
+        const greenGhostAngle = -elapsedTime * 0.25;
+        greenGhost.position.x = 4 + Math.cos(greenGhostAngle) * 2;
+        greenGhost.position.y = Math.sin(greenGhostAngle) * 4 + Math.sin(greenGhostAngle) * 2;
+        greenGhost.position.z = Math.sin(greenGhostAngle) * 2;
+
+        const blueGhostAngle = elapsedTime * 0.20;
+        blueGhost.position.x = 5 + Math.cos(blueGhostAngle) * (5 + Math.sin(elapsedTime * 0.5));
+        blueGhost.position.y = Math.sin(blueGhostAngle * 3) * Math.sin(elapsedTime * 3);
+        blueGhost.position.z = Math.sin(blueGhostAngle) * (5 + Math.sin(greenGhostAngle * 2));
 
         controls.update();
         renderer.render(scene, camera);
     };
 
-    configureMeshDebug(sphere, 'sphere');
+    configureMeshDebug(ground, 'ground plane');
     configureLightDebug(ambientLight, 'ambient light');
     animate();
 }
@@ -78,6 +168,7 @@ function generateDebugGui(): dat.GUI {
         width: 350,
     });
     debugGui.hide();
+
     return debugGui;
 }
 
@@ -150,14 +241,14 @@ function configureLightDebug(light: Light, name: string): void {
 
 function generateScene(): Scene {
     const scene = new Scene();
-    scene.background = new Color( 0xcccccc );
     return scene;
 }
 
 function generatePerspectivCamera(): PerspectiveCamera { // Vision like a cone
     // A field of view between 45 and 75 is generally sufficent depending on your needs
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.setZ(25);
+    camera.position.setZ(10);
+
     return camera;
 }
 
@@ -168,6 +259,8 @@ function generateRenderer(): WebGLRenderer {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = PCFSoftShadowMap;
+    renderer.setClearColor("#262837");
+
     return renderer;
 }
 
@@ -177,24 +270,197 @@ function generateControls(): OrbitControls {
     return controls;
 }
 
-function generatePlane(): Mesh<BufferGeometry, MeshLambertMaterial> {
-    const planeGeometry = new PlaneGeometry( 60, 60 );
-    const planeMaterial = new MeshLambertMaterial( {color: 0xff5733, side: DoubleSide} );
-    const plane = new Mesh( planeGeometry, planeMaterial );
-    plane.position.set(0, -10, 0);
-    plane.rotateX( - Math.PI / 2);
-    plane.receiveShadow = true;
-    return plane;
+function generateHouse(): Group {
+    const house = new Group();
+
+    const walls = generateWalls();
+    house.add(walls);
+
+    const edges = generateMeshEdges(walls);
+    house.add(edges);
+
+    const roof = generateRoof();
+    house.add(roof);
+
+    const roofEdges = generateMeshEdges(roof);
+    house.add(roofEdges);
+
+    const door = generateDoor();
+    house.add(door);
+
+    return house;
 }
 
-function generateSphere(): Mesh<BufferGeometry, MeshPhongMaterial> {
-    const geometry = new SphereGeometry( 5, 64, 64 );
-    const material = new MeshPhongMaterial( {color: 0x338dff} );
-    material.shininess = 50;
-    material.specular = new Color(0x0088ff);
-    const sphere = new Mesh( geometry, material );
-    sphere.position.set(-10, 0, 0);
-    return sphere;
+function generateWalls(): Mesh {
+    const geometry = new BoxBufferGeometry(4, 3, 4);
+    const material = new MeshStandardMaterial({ 
+        map: brickBaseColorTexture,
+        aoMap: brickAmbientOcclusionTexture,
+        normalMap: brickNormalTexture,
+        roughnessMap: brickRoughnessTexture,
+        displacementMap: brickHeightTexture,
+        displacementScale: 0.01
+     });
+
+    const walls = new Mesh(geometry, material);
+    walls.position.set(5, -1.5, 0);
+    walls.castShadow = true;
+    walls.receiveShadow = true;
+    walls.geometry.setAttribute("uv2", new Float32BufferAttribute(walls.geometry.attributes.uv.array, 2));
+
+    return walls;
+}
+
+function generateMeshEdges(mesh: Mesh, color: string = '#000000', linewidth:  number = 2): LineSegments {
+    const geometry = new EdgesGeometry(mesh.geometry);
+    const material = new LineBasicMaterial({ color, linewidth });
+
+    const edges = new LineSegments(geometry, material);
+    edges.position.set(mesh.position.x, mesh.position.y, mesh.position.z);
+    edges.rotation.set(mesh.rotation.x, mesh.rotation.y, mesh.rotation.z);
+
+    return edges;
+}
+
+function generateRoof(): Mesh {
+    const geometry = new ConeBufferGeometry(3.5, 1, 4);
+    const material = new MeshStandardMaterial({ color: '#b35f45' });
+
+    const roof = new Mesh(geometry, material);
+    roof.castShadow = true;
+    roof.receiveShadow = true;
+    roof.position.set(5, 0.5, 0);
+    roof.rotation.set(0, Math.PI / 4, 0);
+
+    return roof;
+}
+
+function generateDoor(): Mesh {
+    const geometry = new PlaneBufferGeometry(1.75, 2.2, 10, 10);
+    const material = new MeshStandardMaterial({ 
+        map: doorTexture,
+        transparent: true,
+        alphaMap: doorOpacityTexture,
+        aoMap: doorAmbientOcclusionTexture,
+        displacementMap: doorHeightTexture,
+        displacementScale: 0.1,
+        normalMap: doorNormalTexture,
+        metalnessMap: doorMetallicTexture,
+        roughnessMap: doorRoughnessTexture
+     });
+
+    const door = new Mesh(geometry, material);
+    door.castShadow = true;
+    door.receiveShadow = true;
+    door.position.set(4.85, -2, 2.01);
+    door.geometry.setAttribute("uv2", new Float32BufferAttribute(door.geometry.attributes.uv.array, 2));
+    
+    return door; 
+}
+
+function generateHouseLight(): Light {
+    const houseLight = new PointLight("#ff7d46", 1, 7);
+    houseLight.position.set(4.85, -0.9, 2.3);
+    houseLight.castShadow = true;
+    houseLight.shadow.mapSize.width = 256;
+    houseLight.shadow.mapSize.height = 256;
+    houseLight.shadow.camera.far = 7;
+
+    return houseLight;
+}
+
+function generateFog(): Fog {
+    const fog = new Fog("#262837", 1, 20);
+    return fog;
+}
+
+function generateBush(): Mesh {
+    const geometry = new SphereBufferGeometry(1, 16, 16);
+    const material = new MeshStandardMaterial({color: "#89c854" });
+
+    const bush = new Mesh(geometry, material);
+    bush.castShadow = true;
+    bush.receiveShadow = true;
+
+    return bush;
+}
+
+function generateLargeBush(): Group {
+    const bushGroup = new Group();
+    
+    const largeBush = generateBush();
+    largeBush.scale.set(0.65, 0.65, 0.65);
+    largeBush.position.set(3, -2.8, 2.5);
+
+    bushGroup.add(largeBush);
+
+    const smallBush = generateBush();
+    smallBush.scale.set(0.5, 0.5, 0.5);
+    smallBush.position.set(3.7, -3, 2.5);
+
+    bushGroup.add(smallBush);
+
+    return bushGroup;
+}
+
+function generateGraves(): Group {
+    const graves = new Group();
+
+    const geometry = new BoxBufferGeometry(0.6, 0.8, 0.3);
+    const material = new MeshStandardMaterial({ "color": "#b2b6b2" });
+
+    for(let i = 0; i < 20; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 4 + Math.random() * 7;
+        const x = Math.sin(angle) * radius;
+        const z = Math.cos(angle) * radius;
+
+        const grave = new Mesh(geometry, material);
+        grave.position.set(x + 4, -2.66, z);
+        grave.rotation.y = (Math.random() - 0.5) * 0.3;
+        grave.rotation.z = (Math.random() - 0.3) * 0.2;
+        grave.castShadow = true;
+        grave.receiveShadow = true;
+
+        graves.add(grave);
+
+        const edges = generateMeshEdges(grave, "#000000");
+        scene.add(edges);
+    }
+
+    return graves;
+}
+
+function generateGhost({ color, x, y, z }: { color: string, x: number, y: number, z: number }): PointLight {
+    const ghost = new PointLight(color, 2, 3);
+    ghost.position.set(x, y, z);
+    ghost.castShadow = true;
+    ghost.shadow.mapSize.width = 256;
+    ghost.shadow.mapSize.height = 256;
+    ghost.shadow.camera.far = 7;
+
+    return ghost;
+}
+
+function generatePlane(): Mesh<BufferGeometry, MeshStandardMaterial> {
+    const planeGeometry = new PlaneGeometry( 60, 60 );
+    const planeMaterial = new MeshStandardMaterial( { 
+        map: grassBaseColorTexture, 
+        aoMap: grassAmbientOcclusionTexture,
+        normalMap: grassNormalTexture,
+        roughnessMap: grassRoughnessTexture,
+        displacementMap: grassHeightTexture,
+        displacementScale: 0.05
+
+    } );
+
+    const plane = new Mesh( planeGeometry, planeMaterial );
+    plane.position.set(0, -3.01, 0);
+    plane.rotateX( - Math.PI / 2);
+    plane.receiveShadow = true;
+    plane.geometry.setAttribute("uv2", new Float32BufferAttribute(plane.geometry.attributes.uv.array, 2));
+
+    return plane;
 }
 
 function onKeyDown(event: any): void{
